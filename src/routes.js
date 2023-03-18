@@ -7,7 +7,6 @@ import {
     MY_VACANCIES_ROUTE, REGISTRATION_ROUTE, VACANCY_ROUTE
 } from "./utils/consts";
 import CreateNewVacancyPage from "./pages/CreateNewVacancyPage";
-import EditVacancyPage from "./pages/EditVacancyPage";
 import JobBoard from "./pages/JobBoard";
 import Auth from "./pages/Auth";
 import VacancyPage from "./pages/VacancyPage";
@@ -23,7 +22,7 @@ export const authRoutes = [
     },
     {
         path:EDIT_VACANCY_ROUTE + '/:id',
-        Component:EditVacancyPage
+        Component:CreateNewVacancyPage
     }
 ]
 

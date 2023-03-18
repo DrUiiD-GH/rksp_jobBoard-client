@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {observer} from "mobx-react-lite";
-import {Context} from "../index";
-import {Form, FormGroup, ListGroup, Row} from "react-bootstrap";
+import {Context} from "../../index";
+import {Form, FormGroup, ListGroup} from "react-bootstrap";
 
 const Filter = observer(() => {
     const {vacancy} = useContext(Context)

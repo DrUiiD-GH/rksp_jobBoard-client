@@ -1,11 +1,13 @@
 import React, {useContext} from 'react';
 import {Context} from "../index";
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
-import {JOB_BOARD_ROUTE, LOGIN_ROUTE} from "../utils/consts";
-import {NavLink} from "react-router-dom";
+import {JOB_BOARD_ROUTE, LOGIN_ROUTE, MY_VACANCIES_ROUTE} from "../utils/consts";
+import {NavLink, useNavigate} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 
+
 const NavBar = observer(() => {
+    const navigate = useNavigate()
     const {user} = useContext(Context)
     return (
         <Navbar bg="dark" variant="light">
@@ -14,8 +16,19 @@ const NavBar = observer(() => {
                 {
                     user.isAuth ?
                         <Nav className="ml-auto">
-                            <Button variant="outline-light" >Мои вакансии</Button>
-                            <Button variant="outline-light" style={{marginLeft:10}} onClick={()=>user.setIsAuth(false)}>Выйти</Button>
+                            <Button
+                                variant="outline-light"
+                                onClick={()=>navigate(MY_VACANCIES_ROUTE)}
+                            >
+                                Мои вакансии
+                            </Button>
+                            <Button
+                                variant="outline-light"
+                                style={{marginLeft:10}}
+                                onClick={()=>navigate(LOGIN_ROUTE)}
+                            >
+                                Выйти
+                            </Button>
                         </Nav>
                         :
                         <Nav className="ml-auto">
