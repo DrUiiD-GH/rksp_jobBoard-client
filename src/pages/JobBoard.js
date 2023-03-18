@@ -2,8 +2,9 @@ import React from 'react';
 import {Col, Container, Row} from "react-bootstrap";
 import Filter from "../components/jobBoard/Filter";
 import VacancyList from "../components/jobBoard/VacancyList";
+import {observer} from "mobx-react-lite";
 
-const JobBoard = () => {
+const JobBoard = observer(() => {
     return (
         <Container className="pt-3">
             <Row>
@@ -16,6 +17,6 @@ const JobBoard = () => {
             </Row>
         </Container>
     );
-};
+});
 
 export default JobBoard;

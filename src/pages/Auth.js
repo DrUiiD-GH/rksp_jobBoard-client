@@ -1,12 +1,39 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {Button, Card, Container, Form} from "react-bootstrap";
-import {NavLink, useLocation} from "react-router-dom";
-import {LOGIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
+import {LOGIN_ROUTE, REGISTRATION_ROUTE, VACANCY_ROUTE} from "../utils/consts";
+import {login, registration} from "../http/userApi";
+import {observer} from "mobx-react-lite";
+import {Context} from "../index";
 
 
-const Auth = () => {
+const Auth = observer(() => {
     const location = useLocation()
     const isLogin = location.pathname === LOGIN_ROUTE
+    const {user} = useContext(Context)
+    const navigate = useNavigate()
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const click = async () => {
+        let data;
+        try{
+            if (isLogin) {
+                data = await login(email, password)
+                console.log(data)
+
+            } else {
+                data = await registration(email, password)
+            }
+            user.setUser(data)
+            user.setIsAuth(true)
+            navigate(VACANCY_ROUTE)
+        }catch (e){
+            alert(e.response.data.message)
+        }
+    }
+
 
     return (
         <Container
@@ -19,10 +46,15 @@ const Auth = () => {
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите ваш email..."
+                        value={email}
+                        onChange={e=>setEmail(e.target.value)}
                     />
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите ваш пароль..."
+                        value={password}
+                        onChange={e=>setPassword(e.target.value)}
+                        type='password'
                     />
                     <div className="d-flex justify-content-between mt-3">
                         {
@@ -39,6 +71,7 @@ const Auth = () => {
                         <Button
                             variant={"outline-success"}
                             className="align-self-end"
+                            onClick={()=>click()}
                         >
                             {isLogin? 'Войти' : 'Зарегестрироваться'}
                         </Button>
@@ -48,6 +81,6 @@ const Auth = () => {
 
         </Container>
     );
-};
+});
 
 export default Auth;

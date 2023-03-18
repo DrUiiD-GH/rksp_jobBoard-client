@@ -2,8 +2,9 @@ import React, {useContext} from 'react';
 import {Card, Container} from "react-bootstrap";
 import {checkOnSalary} from "../components/jobBoard/VacancyRow";
 import {Context} from "../index";
+import {observer} from "mobx-react-lite";
 
-const VacancyPage = () => {
+const VacancyPage = observer(() => {
     const {vacancy} = useContext(Context)
     const vacancy_info = {id:1, title:'Первая вакансия в ИТ', nameCompany:'Топ 1 ИТ', salaryFrom:100000, salaryTo:101000, contacts:'email1@1.1', userId:1, categoryId:1, employmentId:1, scheduleId:2, experienceId:2}
         return (
@@ -53,6 +54,6 @@ const VacancyPage = () => {
             </div>
         </Container>
     );
-};
+});
 
 export default VacancyPage;
