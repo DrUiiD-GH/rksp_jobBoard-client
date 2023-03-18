@@ -1,12 +1,20 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Card, Container} from "react-bootstrap";
 import {checkOnSalary} from "../components/jobBoard/VacancyRow";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
+import {fetchEmployments} from "../http/filtersApi";
+import {useParams} from "react-router-dom";
+import {fetchOneVacancy} from "../http/vacancyApi";
 
 const VacancyPage = observer(() => {
     const {vacancy} = useContext(Context)
-    const vacancy_info = {id:1, title:'Первая вакансия в ИТ', nameCompany:'Топ 1 ИТ', salaryFrom:100000, salaryTo:101000, contacts:'email1@1.1', userId:1, categoryId:1, employmentId:1, scheduleId:2, experienceId:2}
+    const [vacancy_info, setVacancy_info] = useState({description:[]})
+    const {id} = useParams()
+    useEffect(()=>{
+        fetchOneVacancy(id).then(data=>setVacancy_info(data))
+    }, [])
+
         return (
         <Container style={{width:800}}>
             <Card border='grey' bg='light' className="p-4 mt-3" style={{boxShadow:'1px 1px 5px #4344' }}>
@@ -49,9 +57,14 @@ const VacancyPage = observer(() => {
                     </div>
                 </div>
             </Card>
-            <div>
+            <Card className="p-4 mt-3" >
+                <h3 className=" align-self-center">Описание</h3>
+                <div className="px-5 py-3" style={{fontFamily:'sans-serif'}}>
+                    <Card.Text>{vacancy_info.description.text}</Card.Text>
+                </div>
+            </Card>
 
-            </div>
+
         </Container>
     );
 });
