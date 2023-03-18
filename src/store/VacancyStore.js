@@ -35,28 +35,52 @@ export default class VacancyStore {
             {id:10, title:'Третья вакансия в Логистике', nameCompany:'ТранспортНав', salaryFrom:100000, salaryTo:101000, contacts:'email1@1.1', userId:1, categoryId:3, employmentId:1, scheduleId:2, experiencesId:1}
         ]
 
+
+        this._selectedCategory = {}
+        this._selectedEmployment = {}
+        this._selectedExperience = {}
+        this._selectedSchedule = {}
+
         makeAutoObservable(this)
     }
 
     setCategories(categories){
         this._categories = categories
     }
-
     setEmployments(employments) {
         this._employments = employments
     }
-
     setExperiences(experiences) {
         this._experiences = experiences
     }
-
     setSchedules(schedules) {
         this._schedules = schedules
     }
-
     setVacancies(vacancies) {
         this._vacancies = vacancies
     }
+
+    setSelectedCategory(selectedCategory){
+        this._selectedCategory = selectedCategory
+    }
+    setSelectedExperience(selectedExperience){
+        this._selectedExperience= selectedExperience
+    }
+    setSelectedEmployment(selectedEmployment){
+        this._selectedEmployment = selectedEmployment
+    }
+    setSelectedSchedule(selectedSchedule){
+        this._selectedSchedule = selectedSchedule
+    }
+
+
+
+
+
+
+
+
+
 
     get categories() {
         return this._categories
