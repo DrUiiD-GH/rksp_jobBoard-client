@@ -15,12 +15,11 @@ export const fetchMyVacancies = async (id)=>{
     const {data} = await $authHost.get('api/vacancy/my')
     return data
 }
-//
-// export const deleteVacancy = async (id)=>{
-//     const {data} = await $host.post('api/user/login')
-//     localStorage.setItem('token', data.token)
-//     return jwt_decode(data.token)
-// }
+
+export const deleteVacancy = async (id)=>{
+    const {data} = await $authHost.delete('api/vacancy/'+id)
+    return data
+}
 
 export const createVacancy = async (
     title,
@@ -34,7 +33,7 @@ export const createVacancy = async (
     experienceId,
     description
 ) => {
-    await $authHost.post('api/vacancy', {
+    const {data} = await $authHost.post('api/vacancy', {
         title,
         nameCompany,
         salaryFrom,
@@ -46,6 +45,7 @@ export const createVacancy = async (
         experienceId,
         description
     })
+    return data
 }
 
 // export const editVacancy = async (email, password)=>{

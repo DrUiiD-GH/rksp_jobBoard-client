@@ -1,11 +1,16 @@
 import {Button, Card} from "react-bootstrap";
 import {NavLink, useNavigate} from "react-router-dom";
-import {EDIT_VACANCY_ROUTE, VACANCY_ROUTE} from "../../utils/consts";
+import {EDIT_VACANCY_ROUTE, MY_VACANCIES_ROUTE, VACANCY_ROUTE} from "../../utils/consts";
 import React from "react";
 import {checkOnSalary} from "../jobBoard/VacancyRow";
+import {observer} from "mobx-react-lite";
+import {deleteVacancy, fetchMyVacancies} from "../../http/vacancyApi";
 
-const MyVacancyRow = ({vacancy}) => {
+const MyVacancyRow = observer(({vacancy}) => {
     const navigate = useNavigate()
+    const removeVacancy = ()=>{
+        deleteVacancy(vacancy.id).then(fetchMyVacancies().then(data=>vacancy.vacancies))
+    }
     return (
         <div className="mb-2">
             <Card border='grey' bg='light' className="p-3" style={{boxShadow:'1px 1px 5px #4344'}}>
@@ -28,6 +33,7 @@ const MyVacancyRow = ({vacancy}) => {
                         </Button>
                         <Button
                             variant={"outline-danger"}
+                            onClick={()=>removeVacancy()}
                         >
                             Удалить
                         </Button>
@@ -36,5 +42,5 @@ const MyVacancyRow = ({vacancy}) => {
             </Card>
         </div>
     );
-};
+});
 export default MyVacancyRow

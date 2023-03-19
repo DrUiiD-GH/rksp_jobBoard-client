@@ -15,7 +15,7 @@ const MyVacancies = observer(() => {
     const {vacancy} = useContext(Context)
     useEffect(()=>{
         fetchMyVacancies().then(data=>vacancy.setVacancies(data))
-    }, [])
+    }, [vacancy.vacancies])
     return (
         <Container>
             <Container className="pt-3">
