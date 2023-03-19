@@ -1,24 +1,32 @@
-import React, {useContext,  useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {Context} from "../index";
-import {useLocation} from "react-router-dom";
-import {CREAT_NEW_VACANCY_ROUTE} from "../utils/consts";
+import {Navigate, useLocation, useNavigate} from "react-router-dom";
+import {CREAT_NEW_VACANCY_ROUTE, MY_VACANCIES_ROUTE} from "../utils/consts";
+import {fetchCategories, fetchEmployments, fetchExperience, fetchSchedules} from "../http/filtersApi";
+import {observer} from "mobx-react-lite";
+import {createVacancy} from "../http/vacancyApi";
 
-const EditVacancyPage = () => {
+const EditVacancyPage = observer(() => {
     const location = useLocation()
     const isCreate = location.pathname === CREAT_NEW_VACANCY_ROUTE
+    const {vacancy} = useContext(Context)
+    const navigate = useNavigate()
+    useEffect(()=>{
+        fetchEmployments().then(data => vacancy.setEmployments(data))
+        fetchCategories().then(data => vacancy.setCategories(data))
+        fetchSchedules().then(data => vacancy.setSchedules(data))
+        fetchExperience().then(data => vacancy.setExperiences(data))
+    }, [])
 
     const toNumber = (i)=>{
         i = Number(i)
         if(i===0){
-            return null
+            return {}
         }else {
             return i
         }
     }
-
-
-
     //Для редактирования использовать UseEffect для подгрузки данных по id из useParams + подгружать фильтр(категории, занятость)
     const [selectedCategory, setSelectedCategory] = useState(null)
     const [title, setTitle] = useState('')
@@ -31,7 +39,31 @@ const EditVacancyPage = () => {
     const [contacts, setContacts] = useState('')
     const [description, setDescription] = useState('')
 
-    const {vacancy} = useContext(Context)
+
+    const addVacancy = ()=>{
+        try {
+            if (isCreate) {
+                createVacancy(
+                    title,
+                    nameCompany,
+                    salaryFrom,
+                    salaryTo,
+                    contacts,
+                    `${selectedCategory}`,
+                    `${selectedEmployment}`,
+                    `${selectedSchedule}`,
+                    `${selectedExperience}`,
+                    description
+                ).this(navigate(MY_VACANCIES_ROUTE))
+            }else {}
+
+        }catch (e){
+
+        }
+    }
+
+
+
     return (
         <Container className="mb-5">
             <Card className="mt-3">
@@ -77,7 +109,7 @@ const EditVacancyPage = () => {
                                     От:
                                 </Form.Label>
                                 <Col>
-                                    <Form.Control size="lg" type="number" value={Number(salaryFrom)}/>
+                                    <Form.Control size="lg" type="number" value={Number(salaryFrom)} onChange={e =>setSalaryFrom(e.target.value)}/>
                                 </Col>
                             </Row>
                             <Row className={"mt-3"}>
@@ -85,7 +117,7 @@ const EditVacancyPage = () => {
                                     До:
                                 </Form.Label>
                                 <Col>
-                                    <Form.Control size="lg" type="number"  value={Number(salaryTo)} />
+                                    <Form.Control size="lg" type="number"  value={Number(salaryTo)} onChange={e =>setSalaryTo(e.target.value)}/>
                                 </Col>
                             </Row>
                         </Col>
@@ -153,12 +185,12 @@ const EditVacancyPage = () => {
                         </Col>
                     </Row>
                     <Row className={"mt-3 p-3"}>
-                        <Button size="lg" variant="success">{isCreate?'Разместить вакансию':'Подвердить изменения'}</Button>
+                        <Button size="lg" variant="success" onClick={addVacancy}>{isCreate?'Разместить вакансию':'Подвердить изменения'}</Button>
                     </Row>
                 </Form>
             </Card>
         </Container>
     );
-};
+});
 
 export default EditVacancyPage;
