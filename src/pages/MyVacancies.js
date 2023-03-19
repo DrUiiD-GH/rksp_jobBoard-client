@@ -4,8 +4,18 @@ import MyVacancyList from "../components/myVacancies/MyVacancyList";
 import {useNavigate} from "react-router-dom";
 import {CREAT_NEW_VACANCY_ROUTE} from "../utils/consts";
 
-const MyVacancies = () => {
+import {useContext} from "react";
+import {Context} from "../index";
+import {useEffect} from "react";
+import {fetchMyVacancies} from "../http/vacancyApi";
+import {observer} from "mobx-react-lite";
+
+const MyVacancies = observer(() => {
     const navigate = useNavigate()
+    const {vacancy} = useContext(Context)
+    useEffect(()=>{
+        fetchMyVacancies().then(data=>vacancy.setVacancies(data))
+    }, [])
     return (
         <Container>
             <Container className="pt-3">
@@ -24,6 +34,6 @@ const MyVacancies = () => {
             </Container>
         </Container>
     );
-};
+});
 
 export default MyVacancies;

@@ -10,6 +10,11 @@ export const fetchOneVacancy = async (id)=>{
     const {data} = await $host.get('api/vacancy/'+id)
     return data
 }
+
+export const fetchMyVacancies = async (id)=>{
+    const {data} = await $authHost.get('api/vacancy/my')
+    return data
+}
 //
 // export const deleteVacancy = async (id)=>{
 //     const {data} = await $host.post('api/user/login')
