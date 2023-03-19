@@ -21,36 +21,52 @@ export const deleteVacancy = async (id)=>{
     return data
 }
 
-export const createVacancy = async (
-    title,
-    nameCompany,
-    salaryFrom,
-    salaryTo,
-    contacts,
-    categoryId,
-    employmentId,
-    scheduleId,
-    experienceId,
-    description
-) => {
+export const createVacancy = async (title,
+                                    nameCompany,
+                                    salaryFrom,
+                                    salaryTo,
+                                    contacts,
+                                    categoryId,
+                                    employmentId,
+                                    scheduleId,
+                                    experienceId,
+                                    description) => {
     const {data} = await $authHost.post('api/vacancy', {
-        title,
-        nameCompany,
-        salaryFrom,
-        salaryTo,
-        contacts,
-        categoryId,
-        employmentId,
-        scheduleId,
-        experienceId,
-        description
-    })
+                                                                title,
+                                                                nameCompany,
+                                                                salaryFrom,
+                                                                salaryTo,
+                                                                contacts,
+                                                                categoryId,
+                                                                employmentId,
+                                                                scheduleId,
+                                                                experienceId,
+                                                                description})
     return data
 }
 
-// export const editVacancy = async (email, password)=>{
-//     const {data} = await $host.post('api/user/login', {email, password})
-//     localStorage.setItem('token', data.token)
-//     return jwt_decode(data.token)
-// }
+export const editVacancy = async (id,
+                                  title,
+                                  nameCompany,
+                                  salaryFrom,
+                                  salaryTo,
+                                  contacts,
+                                  categoryId,
+                                  employmentId,
+                                  scheduleId,
+                                  experienceId,
+                                  description)=>{
+    const {data} = await $authHost.put('api/vacancy/' + {id}, {title,
+                                                            nameCompany,
+                                                            salaryFrom,
+                                                            salaryTo,
+                                                            contacts,
+                                                            categoryId,
+                                                            employmentId,
+                                                            scheduleId,
+                                                            experienceId,
+                                                            description})
+
+    return data
+}
 

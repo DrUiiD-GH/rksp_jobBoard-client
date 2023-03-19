@@ -1,23 +1,41 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {Context} from "../index";
-import {Navigate, useLocation, useNavigate} from "react-router-dom";
-import {CREAT_NEW_VACANCY_ROUTE, MY_VACANCIES_ROUTE} from "../utils/consts";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {CREAT_NEW_VACANCY_ROUTE, MY_VACANCIES_ROUTE, VACANCY_ROUTE} from "../utils/consts";
 import {fetchCategories, fetchEmployments, fetchExperience, fetchSchedules} from "../http/filtersApi";
 import {observer} from "mobx-react-lite";
-import {createVacancy} from "../http/vacancyApi";
+import {createVacancy, editVacancy, fetchOneVacancy} from "../http/vacancyApi";
 
 const EditVacancyPage = observer(() => {
     const location = useLocation()
+    const {id} = useParams()
     const isCreate = location.pathname === CREAT_NEW_VACANCY_ROUTE
     const {vacancy} = useContext(Context)
     const navigate = useNavigate()
     useEffect(()=>{
+
         fetchEmployments().then(data => vacancy.setEmployments(data))
         fetchCategories().then(data => vacancy.setCategories(data))
         fetchSchedules().then(data => vacancy.setSchedules(data))
         fetchExperience().then(data => vacancy.setExperiences(data))
     }, [])
+
+    if(!isCreate){
+        fetchOneVacancy(id).then(data=>{
+            setSelectedCategory(data.categoryId)
+            setTitle(data.title)
+            setNameCompany(data.nameCompany)
+            setSalaryFrom(data.salaryFrom)
+            setSalaryTo(data.salaryTo)
+            setSelectedEmployment(data.employmentId)
+            setSelectedSchedule(data.scheduleId)
+            setSelectedExperience(data.experienceId)
+            setContacts(data.contacts)
+            setDescription(data.description.text)
+
+        })
+    }
 
     const toNumber = (i)=>{
         i = Number(i)
@@ -40,6 +58,7 @@ const EditVacancyPage = observer(() => {
     const [description, setDescription] = useState('')
 
 
+
     const addVacancy = ()=>{
         try {
             if (isCreate) {
@@ -54,15 +73,26 @@ const EditVacancyPage = observer(() => {
                     `${selectedSchedule}`,
                     `${selectedExperience}`,
                     description
-                ).this(navigate(MY_VACANCIES_ROUTE))
-            }else {}
+                ).then(navigate(MY_VACANCIES_ROUTE))
+            }else {
+                editVacancy(id,
+                    title,
+                    nameCompany,
+                    salaryFrom,
+                    salaryTo,
+                    contacts,
+                    `${selectedCategory}`,
+                    `${selectedEmployment}`,
+                    `${selectedSchedule}`,
+                    `${selectedExperience}`,
+                    description
+                    ).then(navigate(VACANCY_ROUTE+'/'+id))
+            }
 
         }catch (e){
 
         }
     }
-
-
 
     return (
         <Container className="mb-5">
