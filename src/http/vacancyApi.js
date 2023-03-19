@@ -3,7 +3,7 @@ import {$authHost, $host} from "./index";
 
 export const fetchVacancies = async ()=>{
     const {data} =  await $host.get('api/vacancy')
-    return data
+    return data.rows
 }
 
 export const fetchOneVacancy = async (id)=>{
