@@ -1,17 +1,39 @@
-import React, {useContext} from 'react';
+import React, {useContext,  useState} from 'react';
 import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {Context} from "../index";
 import {useLocation} from "react-router-dom";
 import {CREAT_NEW_VACANCY_ROUTE} from "../utils/consts";
 
-const CreateNewVacancyPage = () => {
-
+const EditVacancyPage = () => {
     const location = useLocation()
     const isCreate = location.pathname === CREAT_NEW_VACANCY_ROUTE
 
+    const toNumber = (i)=>{
+        i = Number(i)
+        if(i===0){
+            return null
+        }else {
+            return i
+        }
+    }
+
+
+
+    //Для редактирования использовать UseEffect для подгрузки данных по id из useParams + подгружать фильтр(категории, занятость)
+    const [selectedCategory, setSelectedCategory] = useState(null)
+    const [title, setTitle] = useState('')
+    const [nameCompany, setNameCompany] = useState('')
+    const [salaryFrom, setSalaryFrom] = useState()
+    const [salaryTo, setSalaryTo] = useState()
+    const [selectedEmployment, setSelectedEmployment] = useState(null)
+    const [selectedSchedule, setSelectedSchedule] = useState(null)
+    const [selectedExperience, setSelectedExperience] = useState(null)
+    const [contacts, setContacts] = useState('')
+    const [description, setDescription] = useState('')
+
     const {vacancy} = useContext(Context)
     return (
-        <Container >
+        <Container className="mb-5">
             <Card className="mt-3">
                 <h2 className=" align-self-center mt-3">{isCreate?'Новая вакансия':'Изменение вакансии'}</h2>
                 <Form className='m-3'>
@@ -20,11 +42,11 @@ const CreateNewVacancyPage = () => {
                             Категория:
                         </Form.Label>
                         <Col>
-                            <Form.Select size={'lg'}>
-                                <option>Выберите категорию</option>
+                            <Form.Select size={'lg'} onChange={e=>setSelectedCategory(toNumber(e.target.value))}>
+                                <option value={0}>Выберите категорию</option>
                                 {vacancy.categories.map(
                                     category=>
-                                        <option key={category.id}>{category.name}</option>
+                                        <option key={category.id} value={category.id}>{category.name}</option>
                                             )}
                             </Form.Select>
                         </Col>
@@ -34,7 +56,7 @@ const CreateNewVacancyPage = () => {
                             Должность:
                         </Form.Label>
                         <Col>
-                            <Form.Control size="lg" type="text" placeholder="Введите должность..."/>
+                            <Form.Control size="lg" type="text" placeholder="Введите должность..." value={title} onChange={e=>setTitle(e.target.value)}/>
                         </Col>
                     </Row>
                     <Row className={"mt-3"}>
@@ -42,7 +64,7 @@ const CreateNewVacancyPage = () => {
                             Компания:
                         </Form.Label>
                         <Col>
-                            <Form.Control size="lg" type="text" placeholder="Введите наименование компании..."/>
+                            <Form.Control size="lg" type="text" placeholder="Введите наименование компании..." value={nameCompany} onChange={e=>setNameCompany(e.target.value)}/>
                         </Col>
                     </Row>
                     <Row className={"mt-3"}>
@@ -55,7 +77,7 @@ const CreateNewVacancyPage = () => {
                                     От:
                                 </Form.Label>
                                 <Col>
-                                    <Form.Control size="lg" type="number" />
+                                    <Form.Control size="lg" type="number" value={Number(salaryFrom)}/>
                                 </Col>
                             </Row>
                             <Row className={"mt-3"}>
@@ -63,7 +85,7 @@ const CreateNewVacancyPage = () => {
                                     До:
                                 </Form.Label>
                                 <Col>
-                                    <Form.Control size="lg" type="number" />
+                                    <Form.Control size="lg" type="number"  value={Number(salaryTo)} />
                                 </Col>
                             </Row>
                         </Col>
@@ -73,11 +95,11 @@ const CreateNewVacancyPage = () => {
                             Занятость:
                         </Form.Label>
                         <Col>
-                            <Form.Select>
-                                <option>Любая</option>
+                            <Form.Select onChange={e=>setSelectedEmployment(toNumber(e.target.value))}>
+                                <option value={0}>Любая</option>
                                 {vacancy.employments.map(
                                     employment =>
-                                        <option key={employment.id}>{employment.name}</option>
+                                        <option key={employment.id} value={employment.id}>{employment.name}</option>
                                 )}
                             </Form.Select>
                         </Col>
@@ -88,11 +110,11 @@ const CreateNewVacancyPage = () => {
                             График:
                         </Form.Label>
                         <Col>
-                            <Form.Select>
-                                <option>Любой</option>
+                            <Form.Select onChange={e=>setSelectedSchedule(toNumber(e.target.value))}>
+                                <option value={0}>Любой</option>
                                 {vacancy.schedules.map(
                                     schedule =>
-                                        <option key={schedule.id}>{schedule.name}</option>
+                                        <option key={schedule.id} value={schedule.id}>{schedule.name}</option>
                                 )}
                             </Form.Select>
                         </Col>
@@ -103,11 +125,11 @@ const CreateNewVacancyPage = () => {
                             Опыт работы:
                         </Form.Label>
                         <Col>
-                            <Form.Select >
-                                <option>Любой</option>
+                            <Form.Select onChange={e=>setSelectedExperience(toNumber(e.target.value))}>
+                                <option value={0}>Любой</option>
                                 {vacancy.experiences.map(
                                     experience =>
-                                        <option key={experience.id}>{experience.name}</option>
+                                        <option key={experience.id} value={experience.id}>{experience.name}</option>
                                 )}
                             </Form.Select>
                         </Col>
@@ -118,7 +140,7 @@ const CreateNewVacancyPage = () => {
                             Контакты:
                         </Form.Label>
                         <Col>
-                            <Form.Control size="lg" as="textarea" rows={2}/>
+                            <Form.Control size="lg" as="textarea" rows={2} value={contacts} onChange={e=>setContacts(e.target.value)}/>
                         </Col>
                     </Row>
 
@@ -127,7 +149,7 @@ const CreateNewVacancyPage = () => {
                             Описание:
                         </Form.Label>
                         <Col>
-                            <Form.Control size="lg" as="textarea" rows={10}/>
+                            <Form.Control size="lg" as="textarea" rows={10} value={description} onChange={e=>setDescription(e.target.value)}/>
                         </Col>
                     </Row>
                     <Row className={"mt-3 p-3"}>
@@ -135,9 +157,8 @@ const CreateNewVacancyPage = () => {
                     </Row>
                 </Form>
             </Card>
-
         </Container>
     );
 };
 
-export default CreateNewVacancyPage;
+export default EditVacancyPage;

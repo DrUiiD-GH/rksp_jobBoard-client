@@ -1,5 +1,5 @@
 import {$authHost, $host} from "./index";
-import jwt_decode from "jwt-decode"
+
 
 export const fetchVacancies = async ()=>{
     const {data} =  await $host.get('api/vacancy')

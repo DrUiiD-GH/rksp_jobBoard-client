@@ -14,8 +14,7 @@ const JobBoard = observer(() => {
         fetchCategories().then(data => vacancy.setCategories(data))
         fetchSchedules().then(data => vacancy.setSchedules(data))
         fetchExperience().then(data => vacancy.setExperiences(data))
-        fetchVacancies().then(data => vacancy.setVacancies(data.rows))
-
+        fetchVacancies().then(data => vacancy.setVacancies(data))
     }, [])
     return (
         <Container className="pt-3">

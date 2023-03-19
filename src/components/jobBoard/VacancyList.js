@@ -8,9 +8,9 @@ const VacancyList = observer(() => {
     const {vacancy} = useContext(Context)
     return (
         <Row className="d-flex flex-column">
-            {vacancy.vacancies.map(vac=>
-                <VacancyRow key={vac.key} vacancy={vac}/>
-            )}
+            {/*{vacancy.vacancies.map(vac=>*/}
+            {/*    <VacancyRow key={vac.key} vacancy={vac}/>*/}
+            {/*)}*/}
         </Row>
     );
 });

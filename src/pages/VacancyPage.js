@@ -3,7 +3,6 @@ import {Card, Container} from "react-bootstrap";
 import {checkOnSalary} from "../components/jobBoard/VacancyRow";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
-import {fetchEmployments} from "../http/filtersApi";
 import {useParams} from "react-router-dom";
 import {fetchOneVacancy} from "../http/vacancyApi";
 
