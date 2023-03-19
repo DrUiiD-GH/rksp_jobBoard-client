@@ -2,55 +2,56 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {Context} from "../index";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {CREAT_NEW_VACANCY_ROUTE, MY_VACANCIES_ROUTE, VACANCY_ROUTE} from "../utils/consts";
+import {CREAT_NEW_VACANCY_ROUTE, VACANCY_ROUTE} from "../utils/consts";
 import {fetchCategories, fetchEmployments, fetchExperience, fetchSchedules} from "../http/filtersApi";
 import {observer} from "mobx-react-lite";
 import {createVacancy, editVacancy, fetchOneVacancy} from "../http/vacancyApi";
 
 const EditVacancyPage = observer(() => {
     const location = useLocation()
-    const {id} = useParams()
+    let {id} = useParams()
     const isCreate = location.pathname === CREAT_NEW_VACANCY_ROUTE
     const {vacancy} = useContext(Context)
     const navigate = useNavigate()
     useEffect(()=>{
-
         fetchEmployments().then(data => vacancy.setEmployments(data))
         fetchCategories().then(data => vacancy.setCategories(data))
         fetchSchedules().then(data => vacancy.setSchedules(data))
         fetchExperience().then(data => vacancy.setExperiences(data))
     }, [])
 
-    if(!isCreate){
-        fetchOneVacancy(id).then(data=>{
-            setSelectedCategory(data.categoryId)
-            setTitle(data.title)
-            setNameCompany(data.nameCompany)
-            setSalaryFrom(data.salaryFrom)
-            setSalaryTo(data.salaryTo)
-            setSelectedEmployment(data.employmentId)
-            setSelectedSchedule(data.scheduleId)
-            setSelectedExperience(data.experienceId)
-            setContacts(data.contacts)
-            setDescription(data.description.text)
+    useEffect(()=>{
+        if(!isCreate){
+            fetchOneVacancy(id).then(data=>{
+                setSelectedCategory(data.categoryId)
+                setTitle(data.title)
+                setNameCompany(data.nameCompany)
+                setSalaryFrom(data.salaryFrom)
+                setSalaryTo(data.salaryTo)
+                setSelectedEmployment(data.employmentId)
+                setSelectedSchedule(data.scheduleId)
+                setSelectedExperience(data.experienceId)
+                setContacts(data.contacts)
+                setDescription(data.description.text)
 
-        })
-    }
+            })
+        }
+    }, [])
+
 
     const toNumber = (i)=>{
         i = Number(i)
         if(i===0){
-            return {}
+            return null
         }else {
             return i
         }
     }
-    //Для редактирования использовать UseEffect для подгрузки данных по id из useParams + подгружать фильтр(категории, занятость)
     const [selectedCategory, setSelectedCategory] = useState(null)
     const [title, setTitle] = useState('')
     const [nameCompany, setNameCompany] = useState('')
-    const [salaryFrom, setSalaryFrom] = useState()
-    const [salaryTo, setSalaryTo] = useState()
+    const [salaryFrom, setSalaryFrom] = useState(null)
+    const [salaryTo, setSalaryTo] = useState(null)
     const [selectedEmployment, setSelectedEmployment] = useState(null)
     const [selectedSchedule, setSelectedSchedule] = useState(null)
     const [selectedExperience, setSelectedExperience] = useState(null)
@@ -59,7 +60,7 @@ const EditVacancyPage = observer(() => {
 
 
 
-    const addVacancy = ()=>{
+    const addVacancy = async ()=>{
         try {
             if (isCreate) {
                 createVacancy(
@@ -68,12 +69,12 @@ const EditVacancyPage = observer(() => {
                     salaryFrom,
                     salaryTo,
                     contacts,
-                    `${selectedCategory}`,
-                    `${selectedEmployment}`,
-                    `${selectedSchedule}`,
-                    `${selectedExperience}`,
+                    selectedCategory,
+                    selectedEmployment,
+                    selectedSchedule,
+                    selectedExperience,
                     description
-                ).then(navigate(MY_VACANCIES_ROUTE))
+                ).then(data => navigate(VACANCY_ROUTE+'/'+data.id))
             }else {
                 editVacancy(id,
                     title,
@@ -81,16 +82,20 @@ const EditVacancyPage = observer(() => {
                     salaryFrom,
                     salaryTo,
                     contacts,
-                    `${selectedCategory}`,
-                    `${selectedEmployment}`,
-                    `${selectedSchedule}`,
-                    `${selectedExperience}`,
+                    selectedCategory,
+                    selectedEmployment,
+                    selectedSchedule,
+                    selectedExperience,
                     description
-                    ).then(navigate(VACANCY_ROUTE+'/'+id))
+                    ).then(data => {
+                        console.log(data)
+                    navigate(VACANCY_ROUTE+'/'+id)
+                    }
+                )
             }
 
         }catch (e){
-
+            console.log(e.message)
         }
     }
 

@@ -1,9 +1,13 @@
 import {$authHost, $host} from "./index";
 
 
-export const fetchVacancies = async ()=>{
-    const {data} =  await $host.get('api/vacancy')
-    return data.rows
+export const fetchVacancies = async (categoryId, employmentId, scheduleId, experienceId, limit, page)=>{
+    const {data} =  await $host.get('api/vacancy', {
+        params: {
+            categoryId, employmentId, scheduleId, experienceId, limit, page
+        }
+    })
+    return data
 }
 
 export const fetchOneVacancy = async (id)=>{
@@ -56,7 +60,7 @@ export const editVacancy = async (id,
                                   scheduleId,
                                   experienceId,
                                   description)=>{
-    const {data} = await $authHost.put('api/vacancy/' + {id}, {title,
+    const {data} = await $authHost.put('api/vacancy/' + id, {title,
                                                             nameCompany,
                                                             salaryFrom,
                                                             salaryTo,

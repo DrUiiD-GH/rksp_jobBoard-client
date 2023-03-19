@@ -14,6 +14,10 @@ export default class VacancyStore {
         this._selectedExperience = {}
         this._selectedSchedule = {}
 
+        this._page = 1
+        this._totalCount = 0
+        this._limit = 6
+
         makeAutoObservable(this)
     }
 
@@ -46,6 +50,18 @@ export default class VacancyStore {
         this._selectedSchedule = selectedSchedule
     }
 
+    setPage(page){
+        this._page = page
+    }
+
+    setTotalCount(count){
+        this._totalCount = count
+    }
+
+    setLimit(limit){
+        this._limit = limit
+    }
+
 
 
 
@@ -69,4 +85,27 @@ export default class VacancyStore {
         return this._vacancies
     }
 
+
+    get selectedCategory(){
+        return this._selectedCategory
+    }
+    get selectedEmployment (){
+        return this._selectedEmployment
+    }
+    get selectedExperience(){
+        return this._selectedExperience
+    }
+    get selectedSchedule(){
+        return this._selectedSchedule
+    }
+
+    get page(){
+        return this._page
+    }
+    get totalCount (){
+        return this._totalCount
+    }
+    get limit(){
+        return this._limit
+    }
 }

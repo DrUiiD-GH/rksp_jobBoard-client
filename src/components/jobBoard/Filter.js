@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
-import {Form, FormGroup, ListGroup} from "react-bootstrap";
+import {Dropdown, Form, FormGroup, ListGroup} from "react-bootstrap";
 
 const Filter = observer(() => {
     const {vacancy} = useContext(Context)
@@ -13,13 +13,26 @@ const Filter = observer(() => {
                     <Form.Label>
                         Категория
                     </Form.Label>
-
-                    <Form.Select size="sm">
-                        <option onChange={()=>vacancy.setSelectedCategory({})}>Выберите категорию</option>
-                        {vacancy.categories.map(category =>
-                            <option key={category.id} onChange={()=>vacancy.setSelectedCategory(category)}>{category.name}</option>
-                        )}
-                    </Form.Select>
+                    <Dropdown className={"mt-2 mb-2"}>
+                        <Dropdown.Toggle>{vacancy.selectedCategory.name || 'Выберите категорию'}</Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            {
+                                vacancy.categories.map(category =>
+                                    <Dropdown.Item
+                                        onClick={()=>vacancy.setSelectedCategory(category)}
+                                        key={category.id}
+                                    >
+                                        {category.name}
+                                    </Dropdown.Item>)
+                            }
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    {/*<Form.Select size="sm">*/}
+                    {/*    <option onChange={()=>vacancy.setSelectedCategory({})}>Выберите категорию</option>*/}
+                    {/*    {vacancy.categories.map(category =>*/}
+                    {/*        <option key={category.id} onChange={()=>vacancy.setSelectedCategory(category)}>{category.name}</option>*/}
+                    {/*    )}*/}
+                    {/*</Form.Select>*/}
                 </FormGroup>
             </ListGroup.Item>
             {/*Занятость*/}
@@ -86,7 +99,7 @@ const Filter = observer(() => {
                             label='Не важно'
                             name="formHorizontalRadios"
                             id='0'
-                            onChange={() => vacancy.setSelectedExperience()}
+                            onChange={() => vacancy.setSelectedExperience({})}
                         />
                         {vacancy.experiences.map(experience =>
                             <Form.Check
